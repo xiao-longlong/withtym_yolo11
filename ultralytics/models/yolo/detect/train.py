@@ -54,6 +54,7 @@ class DetectionTrainer(BaseTrainer):
         workers = self.args.workers if mode == "train" else self.args.workers * 2
         return build_dataloader(dataset, batch_size, workers, shuffle, rank)  # return dataloader
 
+    # wxl：将图像缩放到指定大小，然后转换为float
     def preprocess_batch(self, batch):
         """Preprocesses a batch of images by scaling and converting to float."""
         batch["img"] = batch["img"].to(self.device, non_blocking=True).float() / 255

@@ -10,6 +10,9 @@ from pathlib import Path
 import torch
 import torch.nn as nn
 
+from ultralytics.nn.modules.ours_head import (
+    Detect2200
+)
 from ultralytics.nn.modules import (
     AIFI,
     C1,
@@ -61,6 +64,7 @@ from ultralytics.nn.modules import (
     Segment,
     WorldDetect,
     v10Detect,
+    
 )
 from ultralytics.utils import DEFAULT_CFG_DICT, DEFAULT_CFG_KEYS, LOGGER, colorstr, emojis, yaml_load
 from ultralytics.utils.checks import check_requirements, check_suffix, check_yaml
@@ -935,15 +939,33 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
     """Parse a YOLO model.yaml dictionary into a PyTorch model."""
     import ast
 
+    """
+        Wxl:
+            代码实现由yaml生成model的过程,需要重点学习。
+
+        Args:
+            d (dict): 模型字典,为yaml文件内容。
+            ch (int): 
+            verbose (bool): 用于控制是否详细打印调试信息，重点是不打印。
+
+        代码中使用的参数变量具体参考下面的注释。
+
+    """
+
+
     # Args
     max_channels = float("inf")
+    # wxl：nc：检测目标的类别数，act：激活函数，scales：n、s、m、l、x各层次模型的尺度参数。
     nc, act, scales = (d.get(x) for x in ("nc", "activation", "scales"))
+    # wxl：模型中可变形模块的深度和宽度信息。
     depth, width, kpt_shape = (d.get(x, 1.0) for x in ("depth_multiple", "width_multiple", "kpt_shape"))
     if scales:
+        # wxl：检查配置文件中是否有scale参数，如果没有则认为是n类型的。
         scale = d.get("scale")
         if not scale:
             scale = tuple(scales.keys())[0]
             LOGGER.warning(f"WARNING ⚠️ no model scale passed. Assuming scale='{scale}'.")
+        # wxl：在有sacles的情况下，会被宽高会依据scales的配置进行重写
         depth, width, max_channels = scales[scale]
 
     if act:
@@ -1044,7 +1066,7 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
             args = [ch[f]]
         elif m is Concat:
             c2 = sum(ch[x] for x in f)
-        elif m in {Detect, WorldDetect, Segment, Pose, OBB, ImagePoolingAttn, v10Detect}:
+        elif m in {Detect, Detect2200, WorldDetect, Segment, Pose, OBB, ImagePoolingAttn, v10Detect}:
             args.append([ch[x] for x in f])
             if m is Segment:
                 args[2] = make_divisible(min(args[2], max_channels) * width, 8)
