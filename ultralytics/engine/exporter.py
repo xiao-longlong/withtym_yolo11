@@ -251,7 +251,7 @@ class Exporter:
         model.float()
         model = model.fuse()
         for m in model.modules():
-            if isinstance(m, (Detect, RTDETRDecoder)):  # includes all Detect subclasses like Segment, Pose, OBB
+            if isinstance(m, (Detect, Detect2200, RTDETRDecoder)):  # includes all Detect subclasses like Segment, Pose, OBB
                 m.dynamic = self.args.dynamic
                 m.export = True
                 m.format = self.args.format
@@ -493,7 +493,7 @@ class Exporter:
 
             # Generate calibration data for integer quantization
             ignored_scope = None
-            if isinstance(self.model.model[-1], Detect):
+            if isinstance(self.model.model[-1], Detect, Detect2200):
                 # Includes all Detect subclasses like Segment, Pose, OBB, WorldDetect
                 head_module_name = ".".join(list(self.model.named_modules())[-1][0].split(".")[:2])
                 ignored_scope = nncf.IgnoredScope(  # ignore operations
