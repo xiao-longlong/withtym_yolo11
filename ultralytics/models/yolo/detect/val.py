@@ -123,6 +123,7 @@ class DetectionValidator(BaseValidator):
         return predn
 
     def update_metrics(self, preds, batch):
+        a = 0
         """Metrics."""
         for si, pred in enumerate(preds):
             self.seen += 1
@@ -178,7 +179,14 @@ class DetectionValidator(BaseValidator):
 
     def get_stats(self):
         """Returns metrics statistics and results dictionary."""
-        stats = {k: torch.cat(v, 0).cpu().numpy() for k, v in self.stats.items()}  # to numpy
+        try:
+            stats = {k: torch.cat(v, 0).cpu().numpy() for k, v in self.stats.items()} # to numpy
+        except:
+            print("Error: 空的tensor列表无法进行拼接")
+            stats = {k: np.array([]) for k in self.stats.keys()}
+            # for k, v in self.stats.items():
+        # stats = {k: torch.cat(v, 0).cpu().numpy() for k, v in self.stats.items()}  # to numpy
+        
         self.nt_per_class = np.bincount(stats["target_cls"].astype(int), minlength=self.nc)
         self.nt_per_image = np.bincount(stats["target_img"].astype(int), minlength=self.nc)
         stats.pop("target_img", None)
