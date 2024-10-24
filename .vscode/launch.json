@@ -1,0 +1,49 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: 当前文件",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+
+        {
+            "name": "yolov11运行visdrone",
+            "type": "python",
+            "request": "launch",
+            "program": "/workspace/wxlcode/trainvisdrone.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "yolov11运行small_detect",
+            "type": "python",
+            "request": "launch",
+            "program": "/workspace/wxlcode/train_smalldetect.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "yolov11运行coco128",
+            "type": "python",
+            "request": "launch",
+            "program": "/workspace/wxlcode/traincoco128.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "yolov11推理",
+            "type": "python",
+            "request": "launch",
+            "program": "/workspace/wxlcode/prediction.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}
