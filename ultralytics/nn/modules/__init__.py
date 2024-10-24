@@ -74,6 +74,7 @@ from .conv import (
 )
 from .head import OBB, Classify, Detect, Pose, RTDETRDecoder, Segment, WorldDetect, v10Detect
 from .ours_head import Detect2200
+# from .ours_head import Detect2100
 from .transformer import (
     AIFI,
     MLP,
