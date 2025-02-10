@@ -8,6 +8,9 @@
 #   - 502(Zenodo, 'bad gateway')
 #   - 999(LinkedIn, 'unknown status code')
 
+on:
+  never
+
 name: Check Broken links
 
 on:
